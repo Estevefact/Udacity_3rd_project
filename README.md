@@ -1,5 +1,6 @@
 # Udacity_3rd_project
-Code for the 3rd project of Udacity. To start the project one first needs to run some AWS CLI commmands
+Code for the 3rd project of Udacity. To start the project one first needs 
+to run some AWS CLI commmands.
 
 # Run the following commands to create the necessary AWS permissions:
 ## Create bucket
@@ -16,11 +17,14 @@ aws ec2 describe-route-tables
 ```
 ## Create S3 Gateway:
 ```
-aws ec2 create-vpc-endpoint --vpc-id vpc-0551922c355e4c00e --service-name com.amazonaws.us-east-1.s3 --route-table-ids rtb-026a0073a5bf4fa1e
+aws ec2 create-vpc-endpoint --vpc-id vpc-0551922c355e4c00e 
+--service-name com.amazonaws.us-east-1.s3 --route-table-ids 
+rtb-026a0073a5bf4fa1e
 ```
 ## Create an IAM role for glue:
 ```
-aws iam create-role --role-name my-glue-service-role --assume-role-policy-document '{
+aws iam create-role --role-name my-glue-service-role 
+--assume-role-policy-document '{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -33,12 +37,16 @@ aws iam create-role --role-name my-glue-service-role --assume-role-policy-docume
     ]
 }'
 ## Grant provileges of Glue for the S3 bucket
-aws iam put-role-policy --role-name my-glue-service-role --policy-name S3Access --policy-document '{ 
-"Version": "2012-10-17", "Statement": [ { "Sid": "ListObjectsInBucket", "Effect": "Allow", "Action": [ "s3:ListBucket" ],
-"Resource": [ "arn:aws:s3:::project-stedi-eva" ] }, { "Sid": "AllObjectActions", "Effect": "Allow", "Action": "s3:*Object",
+aws iam put-role-policy --role-name my-glue-service-role --policy-name S3Access
+ --policy-document '{ 
+"Version": "2012-10-17", "Statement": [ { "Sid": "ListObjectsInBucket",
+ "Effect": "Allow", "Action": [ "s3:ListBucket" ],
+"Resource": [ "arn:aws:s3:::project-stedi-eva" ] }, { "Sid": 
+"AllObjectActions", "Effect": "Allow", "Action": "s3:*Object",
 "Resource": [ "arn:aws:s3:::project-stedi-eva/*" ] } ] }'
 ## Give Glue access to data in S3
-aws iam put-role-policy --role-name my-glue-service-role --policy-name GlueAccess --policy-document '{
+aws iam put-role-policy --role-name my-glue-service-role --policy-name 
+GlueAccess --policy-document '{
     "Version": "2012-10-17",
     "Statement": [
         {
@@ -132,13 +140,30 @@ aws iam put-role-policy --role-name my-glue-service-role --policy-name GlueAcces
     ]
 }'
 ```
-## To copy form one s3 to another
+## To recursively copy all the data in local in one folder to another
 ```
-aws s3 cp ./project/starter/customer/customer-1655563258079.json s3://project-stedi-eva/customer/landing/
+aws s3 cp ./project/starter/customers/ s3://project-stedi-eva/customer/landing/ 
+--recursive
 ```
-## To recursively copy all the data in one folder to another
-```
-aws s3 cp ./project/starter/customers/ s3://project-stedi-eva/customer/landing/ --recursive
-```
+# Then create the Glue jobs to ingest data or copy the data from local to s3
+Use the .py file of landing for this purpose or upload with CLI
 
-# Last use the .py files in here to create the tables and filter using spark and Athena to query them.
+# Verify the structure of the data:
+First create all tables with glue as the SQL files in here, and then use athena
+to verify that the tables are well uploaded.
+# Use the .py files in here to create the remaining tables, filter and join
+First run the landing to trusted of them all and then the curated files
+
+# Images of Athena of the processes are:
+<img src="Athena_Landing_accelerometer.PNG" width="50%"/>
+
+<img src="Athena_Landing_accelerometer_2.PNG" width="50%"/>
+
+<img src="Athena_Landing_customers.PNG" width="50%"/>
+
+<img src="Athena_Landing_step_trainer.PNG" width="50%"/>
+
+<img src="Athena_trusted_customer.PNG" width="50%"/>
+
+<img src="Athena_trusted_customer_2.PNG" width="50%"/>
+
