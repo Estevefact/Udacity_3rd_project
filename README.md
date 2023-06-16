@@ -167,3 +167,7 @@ First run the landing to trusted of them all and then the curated files
 
 <img src="Athena_trusted_customer_2.PNG" width="50%"/>
 
+<img src="Athena_trusted_trainer.PNG" width="50%"/>
+
+<img src="Athena_curated_final.PNG" width="50%"/>
+
